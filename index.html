@@ -64,7 +64,7 @@ nav a {
   background: #142c51;
   color: white;
   padding: 8px 12px;
-  border-radius: 40px; /* TOUS LES BOUTONS SONT RONDS */
+  border-radius: 40px;
   text-decoration: none;
   font-weight: 500;
   font-size: clamp(12px, 3vw, 15px);
@@ -548,6 +548,21 @@ textarea {
   resize: vertical;
 }
 
+/* Message de confirmation */
+.form-success {
+  background: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  text-align: center;
+  display: none;
+}
+
+.form-success.show {
+  display: block;
+}
+
 /* ===== CTA BLOCK ===== */
 .cta-block {
   margin-top: 60px;
@@ -690,7 +705,7 @@ body {
 <a href="#services">Services</a>
 <a href="#tarifs">Tarifs</a>
 <a href="#avis">Avis</a>
-<a href="#contact">Contact</a> <!-- PLUS DE CLASSE CTA => BOUTON ROND COMME LES AUTRES -->
+<a href="#contact">Contact</a>
 </nav>
 </header>
 
@@ -960,7 +975,7 @@ body {
 <div class="testimonials">
 
   <div class="testimonial">
-    <p>"Une perle rare ! Ancienne voisine devenue ma comptable de référence, elle allie une rigueur exemplaire à une gentillesse naturelle. Elle s’occupe de mes impôts avec un soin incroyable. Félicitations pour l'ouverture du site, qui rend ses services encore plus accessibles. Une experte de confiance ! 😊"</p>
+    <p>"Une perle rare ! Ancienne voisine devenue ma comptable de référence, elle allie une rigueur exemplaire à une gentillesse naturelle. Elle s'occupe de mes impôts avec un soin incroyable. Félicitations pour l'ouverture du site, qui rend ses services encore plus accessibles. Une experte de confiance ! 😊"</p>
     <div class="profile">
       <div class="avatar">I</div>
       <div class="info">
@@ -1002,12 +1017,15 @@ body {
 <h2 class="section-title">Contact</h2>
 <p class="section-sub">Parlons de votre besoin</p>
 <div class="contact">
-<form action="#" method="POST">
+<form id="contactForm" action="https://formspree.io/f/xyklrvdp" method="POST">
 <input type="text" name="nom" placeholder="Votre nom" required>
 <input type="email" name="email" placeholder="Votre email" required>
 <textarea name="message" placeholder="Votre message" required></textarea>
 <button type="submit" class="cta">Envoyer le message</button>
 </form>
+<div id="formSuccess" class="form-success">
+  ✅ Merci pour votre message ! Je vous répondrai dans les plus brefs délais.
+</div>
 </div>
 </section>
 
@@ -1038,5 +1056,31 @@ body {
 </div>
 </footer>
 
-</body>
-</html>
+<script>
+// Gestion du formulaire avec affichage du message de succès
+const contactForm = document.getElementById('contactForm');
+const successMsg = document.getElementById('formSuccess');
+
+if (contactForm) {
+  contactForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(contactForm);
+    
+    try {
+      const response = await fetch(contactForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        contactForm.reset();
+        successMsg.classList.add('show');
+        setTimeout(() => {
+          successMsg.classList.remove('show');
+        }, 5000);
+      } else {
+        alert('Une erreur est sur
